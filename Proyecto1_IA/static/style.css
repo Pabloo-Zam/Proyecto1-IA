@@ -1,0 +1,101 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;  /* Usamos la fuente Open Sans */
+    background: url("/static/FONDO.png") no-repeat center center fixed;
+    background-size: cover;  /* Mantiene la imagen de fondo cubriendo toda la pantalla */
+    background-position: center center;  /* Centra la imagen */
+    background-color: #e4ebfd; /* Color de fondo si la imagen no cubre todo */
+    background-repeat: repeat;
+    background-attachment: fixed;
+    color: #333;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+/* Contenedor principal */
+.container {
+    background-color: #e4ebfd;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+    margin-left: 27px;  /* Ajusta el valor para moverlo más o menos */
+
+}
+
+/* Título */
+h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #1c3983;
+}
+
+/* Área de texto */
+textarea {
+    width: 100%;
+    height: 120px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+    resize: vertical;
+    transition: border-color 0.3s;
+    font-family: 'Open Sans', sans-serif; 
+}
+
+textarea:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+/* Botón */
+input[type="submit"] {
+    background-color: #3498db;
+    color: white;
+    padding: 12px 24px;
+    font-size: 1em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 20px auto 0;
+    font-family: 'Open Sans', sans-serif; 
+}
+
+input[type="submit"]:hover {
+    background-color: #2980b9;
+}
+
+/* Resultado */
+.resultado {
+    margin-top: 20px;
+    font-size: 1.2em;
+    padding: 15px;
+    background-color: #e6d9d7;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1); /* sombra gris abajo y a la derecha */
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* Resultado positivo */
+.resultado.positivo {
+    background-color: #99fa89; /* Verde claro */
+    color: #34ac20;
+}
+
+/* Resultado negativo */
+.resultado.negativo {
+    background-color: #fda2a2; /* Rojo claro */
+    color: #d22626;
+}
