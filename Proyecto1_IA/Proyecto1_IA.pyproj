@@ -24,7 +24,7 @@
     <Compile Include="Proyecto1_IA.py" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="modelo_nb.pkl" />
+    <Content Include=".gitignore" />
     <Content Include="README.md" />
     <Content Include="static\style.css" />
     <Content Include="templates\index.html" />
