@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Tweets</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+       body {
+            background-color: #f0f8ff;  /* Fondo azul claro para toda la página */
+            margin: 0;
+            padding: 20px;
+            font-family: 'Open Sans', sans-serif;
+            min-height: 100vh;
+        }
+        .historial-container {
+            font-family: 'Open Sans', sans-serif;
+
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #c4eafa;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .historial-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .positivo {
+            border-left: 5px solid #4CAF50;
+        }
+        .negativo {
+            border-left: 5px solid #F44336;
+        }
+        .neutro {
+            border-left: 5px solid #FFC107;
+        }
+        .fecha {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .volver-btn {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #8098fa;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="historial-container">
+        <h1>📝 Historial de Tweets</h1>
+        
+        {% if historial %}
+            {% for item in historial %}
+                <div class="historial-item {{ item.prediccion }}">
+                    <div class="fecha">{{ item.fecha }}</div>
+                    <p><strong>Tweet:</strong> {{ item.tweet }}</p>
+                    <p><strong>Resultado:</strong> 
+                        <span class="resultado-{{ item.prediccion }}">
+                            {{ item.prediccion }}
+                        </span>
+                    </p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No hay análisis en el historial todavía.</p>
+        {% endif %}
+        
+        <a href="/" class="volver-btn">Volver al Analizador</a>
+    </div>
+</body>
+</html>
