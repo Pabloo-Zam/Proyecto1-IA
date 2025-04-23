@@ -1,12 +1,19 @@
 import os
 import pandas as pd
 import numpy as np
-import cloudpickle  # Cambiar de pickle a cloudpickle
+import cloudpickle  
 from flask import Flask, request, render_template
-from sklearn.model_selection import train_test_split, KFold  # Importar KFold
+from sklearn.model_selection import train_test_split, KFold  
 from sklearn.metrics import precision_score, recall_score, f1_score, classification_report
 from naive_bayes import NaiveBayes, limpiar_texto
 from deep_translator import GoogleTranslator
+from datetime import datetime
+modelo = None
+metricas = {
+    'precision': 0.0,
+    'recall': 0.0,
+    'f1': 0.0
+}
 
 def traducir_a_ingles(texto):
     return GoogleTranslator(source='auto', target='en').translate(texto)
@@ -71,20 +78,38 @@ def cargar_dataset_y_entrenar_kfold(k=5):
     with open("modelo_nb.pkl", "wb") as f:
         cloudpickle.dump(modelo_final, f)  # Cambiar pickle.dump por cloudpickle.dump
 
-    return modelo_final
+    return modelo_final, {
+        'precision': np.mean(precision_scores),
+        'recall': np.mean(recall_scores),
+        'f1': np.mean(f1_scores)
+    }
 
 # Flask app
 app = Flask(__name__)
+historial = []
 
 try:
     with open("modelo_nb.pkl", "rb") as f:
-        modelo = cloudpickle.load(f)  # Cambiar pickle.load por cloudpickle.load
+        modelo = cloudpickle.load(f)
 except FileNotFoundError:
-    modelo = cargar_dataset_y_entrenar_kfold(k=5)  # Usa K-Fold si no hay modelo
+    modelo, metricas = cargar_dataset_y_entrenar_kfold(k=5)
+    # Guardar las métricas en un archivo para futuras cargas
+    with open("metricas.pkl", "wb") as f:
+        cloudpickle.dump(metricas, f)
+else:
+    try:
+        with open("metricas.pkl", "rb") as f:
+            metricas = cloudpickle.load(f)
+    except FileNotFoundError:
+        pass 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', metricas=metricas)
+
+@app.route('/historial')
+def mostrar_historial():
+    return render_template('historial.html', historial=historial)
 
 @app.route("/predecir", methods=["POST"])
 def predecir():
@@ -92,7 +117,19 @@ def predecir():
     tweet_traducido = traducir_a_ingles(tweet)
     tweet_limpio = limpiar_texto(tweet_traducido)
     resultado = modelo.predecir(tweet_limpio)
-    return render_template("index.html", tweet=tweet, prediccion=resultado)
+
+      # Agregar al historial
+    historial.insert(0, {
+        'fecha': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        'tweet': tweet,
+        'prediccion': resultado
+    })
+    
+    # Limitar el historial a los últimos 50 análisis
+    if len(historial) > 50:
+        historial.pop()
+
+    return render_template("index.html", tweet=tweet, prediccion=resultado, metricas=metricas)
 
 if __name__ == '__main__':
     app.run(debug=True)
