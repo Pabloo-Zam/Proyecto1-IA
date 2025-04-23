@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Clasificador de Sentimientos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Clasificador de Sentimientos</h1>
+        <form action="/predecir" method="post">
+            <textarea name="tweet" placeholder="Escribe un tweet aquí..." required>{{ tweet or '' }}</textarea><br>
+            <input type="submit" value="Clasificar">
+        </form>
+
+        {% if prediccion %}
+        <div class="resultado {% if prediccion == 'positivo' %}positivo{% else %}negativo{% endif %}">
+            <strong>Resultado:</strong> {{ prediccion }}
+        </div>
+        <div class="botones-secundarios">
+            <button class="boton-secundario" onclick="window.location.href='/historial'">Historial</button>
+            <button class="boton-secundario" onclick="abrirModal()">Métricas</button>
+        </div>
+        {% endif %}
+    </div>
+        <!-- Modal -->
+        <div id="modalMetricas" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="cerrarModal()">&times;</span>
+                <h2>📊 Promedio de métricas tras K-Fold</h2>
+                <p><strong>Precisión promedio:</strong> {{ "%.4f"|format(metricas.precision) }}</p>
+                <p><strong>Recall promedio:</strong> {{ "%.4f"|format(metricas.recall) }}</p>
+                <p><strong>F1 Score promedio:</strong> {{ "%.4f"|format(metricas.f1) }}</p>
+            </div>
+        </div>
+    
+        <script>
+            function abrirModal() {
+                document.getElementById('modalMetricas').style.display = 'block';
+            }
+    
+            function cerrarModal() {
+                document.getElementById('modalMetricas').style.display = 'none';
+            }
+    
+            // Cerrar el modal si el usuario hace clic fuera del contenido
+            window.onclick = function(event) {
+                const modal = document.getElementById('modalMetricas');
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+    </script>
+</body>
+</html>
