@@ -8,12 +8,19 @@ Mantener un historial de los últimos análisis realizados
 Visualizar resultados con una interfaz intuitiva
 
 Tecnologías Utilizadas:
+
 Python 3 (Lenguaje principal)
+
 Flask (Framework web)
+
 Scikit-learn (Implementación de K-Fold para validación)
+
 Cloudpickle (Serialización del modelo)
+
 Deep Translator (Traducción de textos)
+
 Pandas/Numpy (Procesamiento de datos)
+
 HTML5/CSS3 (Interfaz de usuario)
 
 Instalación:
